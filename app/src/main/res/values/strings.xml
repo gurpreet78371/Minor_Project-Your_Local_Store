@@ -17,4 +17,6 @@
     <string name="project_name">Your Local Store</string>
     <string name="name">Name</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="existing_user_msg">Already have an Account? Login</string>
+    <string name="our_moto">Now order best quality products \nfrom your local stores!</string>
 </resources>
