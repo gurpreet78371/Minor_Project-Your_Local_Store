@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Grocery Store</string>
+    <string name="top_icon">TOP ICON</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="forgot_password">FORGOT PASSWORD?</string>
+    <string name="or">OR</string>
+    <string name="google_icon">google icon</string>
+    <string name="facebook_icon">facebook icon</string>
+    <string name="new_user_register_now">New User? Register Now</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="email_error">Please enter a valid email.</string>
+    <string name="password_error">Password must be at least 6 characters.</string>
+    <string name="password_error2">Password doesn\'t match.</string>
+    <string name="register">REGISTER</string>
+    <string name="project_name">Your Local Store</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+</resources>
