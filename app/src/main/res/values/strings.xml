@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Grocery Store</string>
+    <string name="app_name">Your Local Store</string>
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
     <string name="top_icon">TOP ICON</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -19,4 +22,56 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="existing_user_msg">Already have an Account? Login</string>
     <string name="our_moto">Now order best quality products \nfrom your local stores!</string>
+    <string name="appMotive">Now order best quality products \nfrom your local stores!</string>
+    <string name="fingerprint_icon_content_description">A very nice taste cherry.</string>
+    <string name="title_activity_sidebar">SidebarActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="appMotive2">Shop groceries items through daily grocery app\nonline super market store at best prices.</string>
+    <string name="search">Search</string>
+    <string name="login_message">Currently, you are not logged in! Log In for better experience.</string>
+    <string name="log_in">Log In</string>
+    <string name="top_discounted">Top Discounted Items</string>
+    <string name="categories">Select Categories</string>
+    <string name="see_more">See More</string>
+    <string name="recently_viewed_items">Recently Viewed Items</string>
+    <string name="menu">menu</string>
+    <string name="cart">cart</string>
+    <string name="select_a_category">Select a category</string>
+    <string name="back">back</string>
+    <string name="confirm_your_email">Confirm Your Email</string>
+    <string name="get_verification_link">Get Verification Link</string>
+    <string name="greetings">Hi, Gurpreet</string>
+    <string name="confirm_email_message">Please confirm your email address to get better experience and access all the features of our app.</string>
+    <string name="sign_in">Sign in to your account</string>
+    <string name="view_your_wish_list">View your wish list</string>
+    <string name="msg2"><![CDATA[Find & reorder past purchases]]></string>
+    <string name="msg3">Track your purchases</string>
+    <string name="already_a_customer_sign_in">Already a customer? Sign in</string>
+    <string name="new_user_create_an_account">New User? Create an account</string>
+    <string name="skip_sign_in">Skip sign in</string>
+    <string name="price_2_items">Price (2 items)</string>
+    <string name="rs_499">Rs. 499/-</string>
+    <string name="discount">Discount</string>
+    <string name="delivery">Delivery</string>
+    <string name="rs_50">- Rs. 50/-</string>
+    <string name="rs_20">Rs. 20/-</string>
+    <string name="rs_479">Rs. 479/-</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="you_will_save_rs_30_on_this_order">You will save Rs.30/- on this order.</string>
+    <string name="_479">479/-</string>
+    <string name="price_details">Price Details</string>
+    <string name="product_details">Product Details</string>
+    <string name="item_image">item image</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="title_activity_main2">MainActivity</string>
+
 </resources>
