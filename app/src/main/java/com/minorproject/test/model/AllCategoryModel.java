@@ -1,8 +1,6 @@
 package com.minorproject.test.model;
 
 public class AllCategoryModel {
-
-
     Integer id;
     Integer imageurl;
 

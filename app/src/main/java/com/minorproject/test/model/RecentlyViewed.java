@@ -1,7 +1,6 @@
 package com.minorproject.test.model;
 
 public class RecentlyViewed {
-
     String name;
     String description;
     String price;

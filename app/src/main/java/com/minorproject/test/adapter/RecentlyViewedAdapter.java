@@ -18,7 +18,6 @@ import com.minorproject.test.model.RecentlyViewed;
 import java.util.List;
 
 public class RecentlyViewedAdapter extends RecyclerView.Adapter<RecentlyViewedAdapter.RecentlyViewedViewHolder> {
-
     Context context;
     List<RecentlyViewed> recentlyViewedList;
 

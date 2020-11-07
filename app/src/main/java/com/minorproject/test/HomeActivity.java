@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.minorproject.test.adapter.CategoryAdapter;
 import com.minorproject.test.adapter.DiscountedProductAdapter;
 import com.minorproject.test.adapter.RecentlyViewedAdapter;
@@ -22,41 +25,42 @@ import com.minorproject.test.model.Category;
 import com.minorproject.test.model.DiscountedProducts;
 import com.minorproject.test.model.RecentlyViewed;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String FILE_NAME = "recently_viewed.txt";
+    private static final String TAG = "HomeActivity";
 
-    RecyclerView discountRecyclerView, categoryRecyclerView, recentlyViewedRecycler;
-    DiscountedProductAdapter discountedProductAdapter;
-    List<DiscountedProducts> discountedProductsList;
 
-    CategoryAdapter categoryAdapter;
-    List<Category> categoryList;
+    private RecyclerView discountRecyclerView, categoryRecyclerView, recentlyViewedRecycler;
+//    DiscountedProductTestAdapter discountedProductAdapter;
+//    List<DiscountedProducts> discountedProductsList;
 
-    RecentlyViewedAdapter recentlyViewedAdapter;
-    List<RecentlyViewed> recentlyViewedList;
+    private CategoryAdapter categoryAdapter;
+    private List<Category> categoryList;
 
-    TextView allCategory;
+    private RecentlyViewedAdapter recentlyViewedAdapter;
+    private List<RecentlyViewed> recentlyViewedList;
 
-    ImageView settings, menu, cart;
+    private TextView allCategory;
 
-    LinearLayout loginLayout;
-    FirebaseUser user;
-    Button gotoLogin;
+    private ImageView settings, menu, cart;
+
+    private LinearLayout loginLayout;
+    private FirebaseUser user;
+    private Button gotoLogin;
+    private DiscountedProductAdapter adapter;
+
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        System.out.println("starting4");
         discountRecyclerView = findViewById(R.id.discountedRecycler);
         categoryRecyclerView = findViewById(R.id.categoryRecycler);
         allCategory = findViewById(R.id.allCategoryImage);
@@ -65,9 +69,11 @@ public class HomeActivity extends AppCompatActivity {
         menu = findViewById(R.id.menu);
         cart = findViewById(R.id.myCart);
 
+        db = FirebaseFirestore.getInstance();
+
         loginLayout = findViewById(R.id.loginMessage);
         gotoLogin = findViewById(R.id.gotoLogin);
-//
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             loginLayout.setVisibility(View.GONE);
@@ -108,15 +114,38 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         // adding data to model
-        discountedProductsList = new ArrayList<>();
-        discountedProductsList.add(new DiscountedProducts(1, R.drawable.discountberry));
-        discountedProductsList.add(new DiscountedProducts(2, R.drawable.discountbrocoli));
-        discountedProductsList.add(new DiscountedProducts(3, R.drawable.discountmeat));
-        discountedProductsList.add(new DiscountedProducts(4, R.drawable.discountberry));
-        discountedProductsList.add(new DiscountedProducts(5, R.drawable.discountbrocoli));
-        discountedProductsList.add(new DiscountedProducts(6, R.drawable.discountmeat));
+//        discountedProductsList = new ArrayList<>();
+//        discountedProductsList.add(new DiscountedProducts(1, R.drawable.discountberry));
+//        discountedProductsList.add(new DiscountedProducts(2, R.drawable.discountbrocoli));
+//        discountedProductsList.add(new DiscountedProducts(3, R.drawable.discountmeat));
+//        discountedProductsList.add(new DiscountedProducts(4, R.drawable.discountberry));
+//        discountedProductsList.add(new DiscountedProducts(5, R.drawable.discountbrocoli));
+//        discountedProductsList.add(new DiscountedProducts(6, R.drawable.discountmeat));
 
-        // adding data to model
+        FirebaseRecyclerOptions<DiscountedProducts> options =
+                new FirebaseRecyclerOptions.Builder<DiscountedProducts>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Category"), DiscountedProducts.class)
+                        .build();
+
+        adapter = new DiscountedProductAdapter(options, HomeActivity.this);
+
+//        db.collection("products")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                discountedProductsList.add(new DiscountedProducts(document.getId(), document.getString(getString(R.string.NAME_KEY))));
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+
+//         adding data to model
         categoryList = new ArrayList<>();
         categoryList.add(new Category(1, R.drawable.ic_fruits));
         categoryList.add(new Category(2, R.drawable.ic_home_fish));
@@ -126,6 +155,22 @@ public class HomeActivity extends AppCompatActivity {
         categoryList.add(new Category(6, R.drawable.ic_home_fish));
         categoryList.add(new Category(7, R.drawable.ic_meat));
         categoryList.add(new Category(8, R.drawable.ic_veggies));
+//        db.collection("products")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                categoryList.add(new Category(document.getId(), document.getString(getString(R.string.NAME_KEY))));
+//                                //Log.d(TAG, "Here " + discountedProductsList.size() + "\n");
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
 
         // adding data to model
         recentlyViewedList = new ArrayList<>();
@@ -134,7 +179,8 @@ public class HomeActivity extends AppCompatActivity {
         recentlyViewedList.add(new RecentlyViewed("Strawberry", "The strawberry is a highly nutritious fruit, loaded with vitamin C.", "₹ 30", "1", "KG", "card2"));
         recentlyViewedList.add(new RecentlyViewed("Kiwi", "Full of nutrients like vitamin C, vitamin K, vitamin E, folate, and potassium.", "₹ 30", "1", "PC", "card1"));
 
-        setDiscountedRecycler(discountedProductsList);
+
+        setDiscountedRecycler();
         setCategoryRecycler(categoryList);
         setRecentlyViewedRecycler(recentlyViewedList);
     }
@@ -149,11 +195,10 @@ public class HomeActivity extends AppCompatActivity {
 //    }
 
 
-    private void setDiscountedRecycler(List<DiscountedProducts> dataList) {
+    private void setDiscountedRecycler() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         discountRecyclerView.setLayoutManager(layoutManager);
-        discountedProductAdapter = new DiscountedProductAdapter(this, dataList);
-        discountRecyclerView.setAdapter(discountedProductAdapter);
+        discountRecyclerView.setAdapter(adapter);
     }
 
 
@@ -171,27 +216,15 @@ public class HomeActivity extends AppCompatActivity {
         recentlyViewedRecycler.setAdapter(recentlyViewedAdapter);
     }
 
-//    public void load(View v) {
-//        FileInputStream fis = null;
-//        try {
-//            fis = openFileInput(FILE_NAME);
-//            InputStreamReader isr = new InputStreamReader(fis);
-//            BufferedReader br = new BufferedReader(isr);
-//            StringBuilder sb = new StringBuilder();
-//            String text;
-//            while ((text = br.readLine()) != null) {
-//                sb.append(text).append("\n");
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (fis != null) {
-//                try {
-//                    fis.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 }

@@ -1,5 +1,6 @@
 package com.minorproject.test.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +10,18 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.minorproject.test.R;
 import com.minorproject.test.model.DiscountedProducts;
 
 import java.util.List;
 
-public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedProductAdapter.DiscountedProductViewHolder> {
-
+public class DiscountedProductTestAdapter extends RecyclerView.Adapter<DiscountedProductTestAdapter.DiscountedProductViewHolder> {
+    private static final String TAG = "DiscountedProductAdapter";
     Context context;
     List<DiscountedProducts> discountedProductsList;
 
-    public DiscountedProductAdapter(Context context, List<DiscountedProducts> discountedProductsList) {
+    public DiscountedProductTestAdapter(Context context, List<DiscountedProducts> discountedProductsList) {
         this.context = context;
         this.discountedProductsList = discountedProductsList;
     }
@@ -32,11 +34,14 @@ public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedPro
         return new DiscountedProductViewHolder(view);
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(@NonNull DiscountedProductViewHolder holder, int position) {
-
-        holder.discountImageView.setImageResource(discountedProductsList.get(position).getImageurl());
-
+        System.out.println(discountedProductsList.get(position).getImageurl());
+        Glide.with(context)
+                .asBitmap()
+                .load(discountedProductsList.get(position).getImageurl())
+                .into(holder.discountImageView);
     }
 
     @Override
@@ -50,7 +55,6 @@ public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedPro
 
         public DiscountedProductViewHolder(@NonNull View itemView) {
             super(itemView);
-
             discountImageView = itemView.findViewById(R.id.discountImage);
 
         }

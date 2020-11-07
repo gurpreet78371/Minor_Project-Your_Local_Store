@@ -15,7 +15,6 @@ import com.minorproject.test.model.AllCategoryModel;
 import java.util.List;
 
 public class AllCategoryAdapter extends RecyclerView.Adapter<AllCategoryAdapter.AllCategoryViewHolder> {
-
     Context context;
     List<AllCategoryModel> categoryList;
 

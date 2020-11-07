@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class ConfirmEmailActivity extends AppCompatActivity {
 
     private static final String TAG = "ConfirmEmailActivity";
-    FirebaseUser user;
+    private FirebaseUser user;
     private TextView userName;
     private Button sendEmail;
     private ImageView back;

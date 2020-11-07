@@ -13,8 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class PersonalActivity extends AppCompatActivity {
 
-    RelativeLayout gotoProfile;
-    ImageView back;
+    private RelativeLayout gotoProfile;
+    private ImageView back;
     private TextView signOut;
 
     @Override

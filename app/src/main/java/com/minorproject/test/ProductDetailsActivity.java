@@ -8,21 +8,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class ProductDetailsActivity extends AppCompatActivity {
 
     private static final String FILE_NAME = "recently_viewed.txt";
 
-    ImageView img, back;
-    TextView proName, proPrice, proDesc, proQty, proUnit;
+    private ImageView img, back;
+    private TextView proName, proPrice, proDesc, proQty, proUnit;
 
-    String name, price, desc, qty, unit;
+    private String name, price, desc, qty, unit;
     int image;
 
     @Override

@@ -1,29 +1,30 @@
 package com.minorproject.test.model;
 
 public class DiscountedProducts {
+    String Name;
+    String imageUrl;
 
-
-    Integer id;
-    int imageurl;
-
-    public DiscountedProducts(Integer id, int imageurl) {
-        this.id = id;
-        this.imageurl = imageurl;
+    public DiscountedProducts() {
     }
 
-    public Integer getId() {
-        return id;
+    public DiscountedProducts(String id, String imageurl) {
+        this.Name = id;
+        this.imageUrl = imageurl;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getId() {
+        return Name;
     }
 
-    public int getImageurl() {
-        return imageurl;
+    public void setId(String id) {
+        this.Name = id;
     }
 
-    public void setImageurl(int imageurl) {
-        this.imageurl = imageurl;
+    public String getImageurl() {
+        return imageUrl;
+    }
+
+    public void setImageurl(String imageurl) {
+        this.imageUrl = imageurl;
     }
 }

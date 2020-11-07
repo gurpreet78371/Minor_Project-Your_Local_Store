@@ -21,11 +21,11 @@ import java.util.List;
 
 public class AllCategoryActivity extends AppCompatActivity {
 
-    RecyclerView AllCategoryRecycler;
-    AllCategoryAdapter allCategoryAdapter;
-    List<AllCategoryModel> allCategoryModelList;
+    private RecyclerView AllCategoryRecycler;
+    private AllCategoryAdapter allCategoryAdapter;
+    private List<AllCategoryModel> allCategoryModelList;
 
-    ImageView back;
+    private ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

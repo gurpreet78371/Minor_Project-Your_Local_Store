@@ -1,8 +1,6 @@
 package com.minorproject.test.model;
 
 public class Category {
-
-
     Integer id;
     int imageurl;
 

@@ -12,8 +12,8 @@ import java.util.List;
 
 public class MyCartActivity extends AppCompatActivity {
 
-    RecyclerView cartItemRecycler;
-    List<Category> cartItems;
+    private RecyclerView cartItemRecycler;
+    private List<Category> cartItems;
     private TextView offerMessage, actualPrice, discount, delivery, totalPrice;
 
     @Override

@@ -3,6 +3,7 @@ package com.minorproject.test;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,10 +18,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.minorproject.test.model.User;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth mFirebaseAuth;
     private TextInputLayout userEmail, userPassword, confirmPassword, userName;
     private TextInputEditText inputPassword;
     private Button Register;
@@ -41,32 +46,14 @@ public class RegisterActivity extends AppCompatActivity {
         final ProgressDialog mLoadingBar = new ProgressDialog(RegisterActivity.this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-//
-//        inputPassword.addTextChangedListener(new TextWatcherAdapter);
-//        inputPassword.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if(s.length() > 0) {
-//                    passwordStrength.setVisibility(View.VISIBLE);
-//                    checkPasswordStrength((String) s);
-//                    passwordStrength.setText(checkPasswordStrength((String) s)[0]);
-////                    passwordStrength.setTextColor(Integer.parseInt(checkPasswordStrength((String) s)[1]));
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {}
-//        });
+
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = userEmail.getEditText().getText().toString().trim();
-                String password = userPassword.getEditText().getText().toString().trim();
-                String password2 = confirmPassword.getEditText().getText().toString().trim();
-                String name = userName.getEditText().getText().toString().trim();
+                final String email = Objects.requireNonNull(userEmail.getEditText()).getText().toString().trim();
+                String password = Objects.requireNonNull(userPassword.getEditText()).getText().toString().trim();
+                String password2 = Objects.requireNonNull(confirmPassword.getEditText()).getText().toString().trim();
+                final String name = Objects.requireNonNull(userName.getEditText()).getText().toString().trim();
 
                 if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Please enter your email and password!", Toast.LENGTH_SHORT).show();
@@ -76,6 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (email.isEmpty()) {
                     userEmail.setError("Please enter your email.");
                     userEmail.requestFocus();
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    userEmail.setError("Please enter valid email.");
+                    userEmail.requestFocus();
                 } else if (password.isEmpty()) {
                     userPassword.setError("Please enter your password.");
                     userPassword.requestFocus();
@@ -83,22 +73,36 @@ public class RegisterActivity extends AppCompatActivity {
                     confirmPassword.setError("Password doesn't match");
                     confirmPassword.requestFocus();
                 } else {
-                    mLoadingBar.setTitle("Logging in");
+                    mLoadingBar.setTitle("Creating account");
                     mLoadingBar.setMessage("Please wait...");
                     mLoadingBar.setCanceledOnTouchOutside(false);
                     mLoadingBar.show();
                     System.out.println(email + " " + password);
-                    mFirebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(RegisterActivity.this, "Some error occurred, Please try again!", Toast.LENGTH_SHORT).show();
+                    mFirebaseAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
 //                                recreate();
-                            } else {
-                                startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
-                            }
-                        }
-                    });
+                                    } else {
+                                        User user = new User(name, "0", "0", "customer", "0", email);
+                                        FirebaseDatabase.getInstance().getReference("Users")
+                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                .setValue(user).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                                                } else {
+                                                    Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
                 }
             }
         });
@@ -109,6 +113,15 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (mFirebaseAuth.getCurrentUser() != null) {
+            //handle the already login user
+        }
     }
 
     String[] checkPasswordStrength(String input) {

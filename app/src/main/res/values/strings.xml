@@ -74,4 +74,37 @@
     <string name="buy_now">Buy Now</string>
     <string name="title_activity_main2">MainActivity</string>
 
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="PRODUCT_ID">productID</string>
+    <string name="NAME_KEY">name</string>
+    <string name="PRICE_KEY">price</string>
+    <string name="TYPE_KEY">type</string>
+    <string name="IMG_KEY">img</string>
+    <string name="PUBNUB_PUBLISH_KEY">pub-c-487a7d44-fa31-4693-a989-a2840f5f6366</string>
+    <string name="PUBNUB_SUBSCRIBE_KEY">sub-c-8aa99b3c-1790-11eb-9b79-2636081330fc</string>
+    <string name="google_maps_api_key" translatable="false">AIzaSyCMBx88UxeKz-alKRm4khPJIL_n8ZVVMuA</string>
+
+    <string name="SOLD_KEY">sold</string>
+    <string-array name="stock_array">
+        <item>All items</item>
+        <item>Ready Stock</item>
+        <item>Out of Stock</item>
+        <item>Suspended</item>
+    </string-array>
+    <string-array name="type_array">
+        <item>food</item>
+        <item>kitchen</item>
+        <item>home</item>
+        <item>washroom</item>
+        <item>garden</item>
+        <item>garden</item>
+    </string-array>
 </resources>
