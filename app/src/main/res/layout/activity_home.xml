@@ -82,7 +82,7 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="8dp"
                     android:autofillHints="milk"
                     android:background="@drawable/search_bg"
                     android:drawableStart="@drawable/ic_search_black_24dp"
@@ -92,10 +92,19 @@
                     android:hint="@string/search"
                     android:inputType="textPersonName"
                     android:paddingStart="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView2"
                     tools:ignore="RtlSymmetry" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editText" />
 
                 <LinearLayout
                     android:id="@+id/loginMessage"

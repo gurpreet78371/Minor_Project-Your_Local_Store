@@ -3,9 +3,9 @@
     package="com.minorproject.test">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -14,14 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".OrderDetailActivity" />
+        <activity android:name=".OrderListActivity" />
+        <activity android:name=".VendorProfileActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCMBx88UxeKz-alKRm4khPJIL_n8ZVVMuA"/>
+            android:value="AIzaSyCMBx88UxeKz-alKRm4khPJIL_n8ZVVMuA" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity android:name=".SetLocationActivity" />
-        <activity android:name=".AddNewItemsActivity" />
         <activity android:name=".MyCartActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".PersonalActivity" />
@@ -39,6 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AddProductActivity" />
+        <activity android:name=".BarChartActivity" />
+        <activity android:name=".ShopActivity" />
     </application>
 
 </manifest>

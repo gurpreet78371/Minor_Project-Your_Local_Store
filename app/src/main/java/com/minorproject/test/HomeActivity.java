@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,12 +48,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView allCategory;
 
-    private ImageView settings, menu, cart;
+    String searchText = "";
 
     private LinearLayout loginLayout;
     private FirebaseUser user;
     private Button gotoLogin;
     private DiscountedProductAdapter adapter;
+    private ImageView settings, menu, cart, search;
+    private EditText searchBar;
 
     private FirebaseFirestore db;
 
@@ -68,6 +72,16 @@ public class HomeActivity extends AppCompatActivity {
         settings = findViewById(R.id.settings);
         menu = findViewById(R.id.menu);
         cart = findViewById(R.id.myCart);
+        searchBar = findViewById(R.id.editText);
+        search = findViewById(R.id.imageView);
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchText = searchBar.getText().toString();
+                Toast.makeText(HomeActivity.this, searchText, Toast.LENGTH_LONG).show();
+            }
+        });
 
         db = FirebaseFirestore.getInstance();
 

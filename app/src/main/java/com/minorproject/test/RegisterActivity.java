@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +26,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private TextInputLayout userEmail, userPassword, confirmPassword, userName;
-    private TextInputEditText inputPassword;
     private Button Register;
     private TextView gotoLogin, passwordStrength;
 
@@ -42,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPassword = findViewById(R.id.inputConfirmPasswordLayout);
         userName = findViewById(R.id.inputNameLayout);
         passwordStrength = findViewById(R.id.passwordStrength);
-        inputPassword = findViewById(R.id.inputPassword);
         final ProgressDialog mLoadingBar = new ProgressDialog(RegisterActivity.this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();

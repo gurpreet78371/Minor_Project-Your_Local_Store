@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseUser user;
-    private Button loginButton, registerButton, skip;
+    private Button loginButton, registerButton, skip, vendorLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         skip = findViewById(R.id.skip);
+        vendorLogin = findViewById(R.id.continue_as_vendor);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) startActivity(new Intent(MainActivity.this, HomeActivity.class));
@@ -45,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            }
+        });
+
+        vendorLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AddProductActivity.class));
             }
         });
     }
