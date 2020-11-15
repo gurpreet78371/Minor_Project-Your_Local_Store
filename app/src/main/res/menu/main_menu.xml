@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/categories"
+            android:title="Shop by Category" />
+        <item
+            android:id="@+id/top_deals"
+            android:title="Today's Deals" />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/your_orders"
+            android:title="Your Orders" />
+        <item
+            android:id="@+id/Your_wish_list"
+            android:title="Your Wish List" />
+        <item
+            android:id="@+id/your_account"
+            android:title="Your Account" />
+    </group>
+
+    <!--    <item android:title="profile">-->
+    <!--        <menu>-->
+    <!--            <group android:checkableBehavior="single">-->
+    <!--                <item-->
+    <!--                    android:id="@+id/nav_login"-->
+    <!--                    android:title="HOME"-->
+    <!--                    android:icon="@drawable/ic_search_black_24dp"/>-->
+    <!--                <item-->
+    <!--                    android:id="@+id/nav_logout"-->
+    <!--                    android:title="@string/search"-->
+    <!--                    android:icon="@drawable/ic_search_black_24dp"/>-->
+    <!--                <item-->
+    <!--                    android:id="@+id/nav_profile1"-->
+    <!--                    android:title="fav"-->
+    <!--                    android:icon="@drawable/ic_search_black_24dp"/>-->
+    <!--            </group>-->
+    <!--        </menu>-->
+    <!--    </item>-->
+
+    <item android:title="Services">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_login1"
+                    android:title="Settings" />
+                <item
+                    android:id="@+id/nav_logout1"
+                    android:title="Customer Service" />
+                <item
+                    android:id="@+id/nav_profile11"
+                    android:title="Help" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Your Local Store">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/nav_share"
+                    android:title="Share" />
+                <item
+                    android:id="@+id/rate"
+                    android:title="Rate Us" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

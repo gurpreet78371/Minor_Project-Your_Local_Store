@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/cancel_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_baseline_cancel_24" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/verification_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:text="Enter one time password sent on +91 8837885175" />
+
+        <com.chaos.view.PinView
+            android:id="@+id/otp"
+            style="@style/PinWidget.PinView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:cursorVisible="true"
+            android:inputType="number"
+            android:itemBackground="@color/card1"
+            app:cursorColor="#000"
+            app:hideLineWhenFilled="true"
+            app:itemCount="6"
+            app:itemHeight="40dp"
+            app:itemRadius="5dp"
+            app:itemWidth="40dp"
+            app:lineColor="#000" />
+
+        <Button
+            android:id="@+id/submit_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="submit" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
