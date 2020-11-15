@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minorproject.test.common.ConfirmEmailActivity;
 
 public class SettingActivity extends AppCompatActivity {
 

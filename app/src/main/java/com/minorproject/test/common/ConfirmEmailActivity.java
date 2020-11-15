@@ -1,4 +1,4 @@
-package com.minorproject.test;
+package com.minorproject.test.common;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,25 +15,33 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minorproject.test.R;
 
 public class ConfirmEmailActivity extends AppCompatActivity {
 
     private static final String TAG = "ConfirmEmailActivity";
-    private FirebaseUser user;
+
+    // views
     private TextView userName;
     private Button sendEmail;
     private ImageView back;
+
+    // firebase
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_email);
 
+        // views
         userName = findViewById(R.id.txtUsername);
         sendEmail = findViewById(R.id.btnVerifyEmail);
         back = findViewById(R.id.back);
 
+        // firebase
         user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null) {
             String email = user.getEmail();
             userName.setText("Hi, " + email);

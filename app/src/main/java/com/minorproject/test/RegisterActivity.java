@@ -18,6 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.minorproject.test.common.LoginActivity;
+import com.minorproject.test.customer.HomeActivity;
 import com.minorproject.test.model.User;
 
 import java.util.Objects;

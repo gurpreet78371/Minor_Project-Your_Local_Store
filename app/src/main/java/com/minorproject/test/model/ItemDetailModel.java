@@ -8,6 +8,18 @@ public class ItemDetailModel {
     String seller;
     double rating;
 
+    public ItemDetailModel() {
+    }
+
+    public ItemDetailModel(String name, String description, double price, String[] imageUrl, String seller, double rating) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.seller = seller;
+        this.rating = rating;
+    }
+
     public String getName() {
         return name;
     }

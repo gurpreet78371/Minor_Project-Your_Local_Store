@@ -1,4 +1,4 @@
-package com.minorproject.test;
+package com.minorproject.test.common;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -18,17 +18,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.minorproject.test.R;
+import com.minorproject.test.RegisterActivity;
+import com.minorproject.test.customer.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAuth mFirebaseAuth;
-    private EditText userEmail, userPassword;
+    //views
+    private TextInputLayout userEmail, userPassword;
     private Button login;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private TextView gotoRegister, forgotPassword;
+
+    //  firebase
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    // others
     private ProgressDialog mLoadingBar;
 
     @Override
@@ -36,13 +45,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        userEmail = findViewById(R.id.inputEmailLayout);
-        userPassword = findViewById(R.id.inputPasswordLayout);
+        // views
+        userEmail = findViewById(R.id.inputEmail);
+        userPassword = findViewById(R.id.inputPassword);
         login = findViewById(R.id.btnLogin);
         gotoRegister = findViewById(R.id.gotoLogin);
         forgotPassword = findViewById(R.id.forgotPassword);
 
+        // others
         mLoadingBar = new ProgressDialog(LoginActivity.this);
+
+        // firebase
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -61,8 +74,8 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = userEmail.getText().toString();
-                String password = userPassword.getText().toString();
+                String email = userEmail.getEditText().getText().toString();
+                String password = userPassword.getEditText().getText().toString();
                 if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please enter your email and password!", Toast.LENGTH_SHORT).show();
                 } else if (email.isEmpty()) {

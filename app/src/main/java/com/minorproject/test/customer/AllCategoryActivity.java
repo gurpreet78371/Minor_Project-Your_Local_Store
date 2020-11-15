@@ -1,4 +1,4 @@
-package com.minorproject.test;
+package com.minorproject.test.customer;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.minorproject.test.R;
 import com.minorproject.test.adapter.AllCategoryAdapter;
 import com.minorproject.test.model.AllCategoryModel;
 
@@ -21,10 +22,15 @@ import java.util.List;
 
 public class AllCategoryActivity extends AppCompatActivity {
 
-    private RecyclerView AllCategoryRecycler;
-    private AllCategoryAdapter allCategoryAdapter;
-    private List<AllCategoryModel> allCategoryModelList;
+    // views
     private ImageView back;
+    private RecyclerView AllCategoryRecycler;
+
+    // adapters
+    private AllCategoryAdapter allCategoryAdapter;
+
+    //lists
+    private List<AllCategoryModel> allCategoryModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

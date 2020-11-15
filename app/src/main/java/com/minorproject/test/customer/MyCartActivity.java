@@ -1,4 +1,4 @@
-package com.minorproject.test;
+package com.minorproject.test.customer;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -6,26 +6,30 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.minorproject.test.R;
 import com.minorproject.test.model.Category;
 
 import java.util.List;
 
 public class MyCartActivity extends AppCompatActivity {
 
-    private RecyclerView cartItemRecycler;
-    private List<Category> cartItems;
+    // views
     private TextView offerMessage, actualPrice, discount, delivery, totalPrice;
+    private RecyclerView cartItemRecycler;
+
+    // lists
+    private List<Category> cartItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart);
+        // views
         offerMessage = findViewById(R.id.offerMessage);
         actualPrice = findViewById(R.id.totalItemPrice);
         discount = findViewById(R.id.discountAmount);
         delivery = findViewById(R.id.deliveryAmount);
         totalPrice = findViewById(R.id.totalAmount);
-
 
     }
 }

@@ -22,6 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.minorproject.test.adapter.SliderAdapterExample;
+import com.minorproject.test.common.MainActivity;
+import com.minorproject.test.customer.MyCartActivity;
 import com.minorproject.test.model.Review;
 import com.minorproject.test.model.SliderItem;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -34,17 +36,21 @@ import java.util.List;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    private static final String FILE_NAME = "recently_viewed.txt";
+    // views
     private RecyclerView reviewListRecyclerView;
-    private ImageView img, back, cart;
-    private TextView proName, proPrice, proDesc, proQty, proUnit, loadReviews;
+    private ImageView back, cart;
+    private TextView loadReviews;
+
+    // firebase
     private FirebaseFirestore db;
-    private String name, price, desc, qty, unit;
+
+    // adapters
     private FirestoreRecyclerAdapter adapter;
-    private SliderView sliderView;
     private SliderAdapterExample sliderAdapter;
+
+    // slider
+    private SliderView sliderView;
     private List<SliderItem> sliderItemList;
-    int image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +188,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private class ClickListener implements View.OnClickListener {
-
         @Override
         public void onClick(View v) {
             switch (v.getId()) {

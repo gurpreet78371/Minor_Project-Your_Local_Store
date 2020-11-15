@@ -10,9 +10,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.minorproject.test.common.MainActivity;
 
 public class PersonalActivity extends AppCompatActivity {
 
+    // views
     private RelativeLayout gotoProfile;
     private ImageView back;
     private TextView signOut;
@@ -22,6 +24,7 @@ public class PersonalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
 
+        // views
         gotoProfile = findViewById(R.id.loginMessage);
         back = findViewById(R.id.back);
         signOut = findViewById(R.id.SignOut);

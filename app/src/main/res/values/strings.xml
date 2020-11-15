@@ -93,6 +93,17 @@
 
     <string name="SOLD_KEY">sold</string>
     <string name="name">Name</string>
+
+    <!--    OnBoard strings-->
+    <string name="grocery_heading">Your Local Store</string>
+    <string name="grocery_description">Now you can order daily groceries from your local stores.</string>
+    <string name="safe_and_clean_heading">100% Safe and Clean</string>
+    <string name="safe_and_clean_description">We provide full safe and clean service in this COVID situation.</string>
+    <string name="fast_delivery_heading">Fast Delivery</string>
+    <string name="fast_delivery_description">You will get your order in less than 30 minutes after placing an order.</string>
+    <string name="payment_heading">Easy Payment</string>
+    <string name="payment_description">You can pay very easily either using cash or online payment.</string>
+
     <string-array name="stock_array">
         <item>All items</item>
         <item>Ready Stock</item>
@@ -115,5 +126,20 @@
         <item>Box</item>
         <item>Item</item>
         <item>gram</item>
+    </string-array>
+
+    <string-array name="cities">
+        <item>Select Your City</item>
+        <item>Patiala</item>
+        <item>Chandigarh</item>
+        <item>Zirakpur</item>
+        <item>Panchkula</item>
+    </string-array>
+
+    <string-array name="business_type">
+        <item>Select your Business Type</item>
+        <item>Karyana Store</item>
+        <item>Chemist</item>
+        <item>Clothing Store</item>
     </string-array>
 </resources>
