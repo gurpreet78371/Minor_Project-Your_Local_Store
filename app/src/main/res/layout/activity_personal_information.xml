@@ -209,6 +209,7 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:onClick="gotoBusiness"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -222,6 +223,7 @@
                     android:textColor="#000" />
 
                 <Button
+                    android:onClick="gotoBilling"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,20 +29,19 @@ import com.minorproject.test.model.OrderListItem;
 
 public class OrderListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final float END_SCALE = 0.7f;
-
     // views
     private TextView orderNumber, location;
     private RecyclerView orderListRecyclerView;
     private Button nextPage, previousPage;
     private ImageView addProduct, gotoPersonal;
-    private ImageView mainMenu;
-    private RelativeLayout contentView;
 
     // Firebase
     private FirestoreRecyclerAdapter adapter;
 
     // Drawer menu
+    private static final float END_SCALE = 0.7f;
+    private RelativeLayout contentView;
+    private ImageView mainMenu;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -58,10 +58,10 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
         previousPage = findViewById(R.id.previous_page);
         addProduct = findViewById(R.id.add_product);
         gotoPersonal = findViewById(R.id.goto_personal);
-        mainMenu = findViewById(R.id.main_menu);
-        contentView = findViewById(R.id.content);
 
         // Drawer menu
+        contentView = findViewById(R.id.content);
+        mainMenu = findViewById(R.id.main_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
 
@@ -85,12 +85,20 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull OrderListItem model) {
+            protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull final OrderListItem model) {
                 holder.orderNumber.setText(position + 1 + ".");
                 holder.location.setText(model.getLocation());
                 holder.price.setText(model.getPrice());
                 holder.payment.setText(model.getPayment());
                 holder.status.setText(model.getStatus());
+                holder.parent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
+//                        intent.putExtra("itemName", model.getOrderItems()));
+                        startActivity(intent);
+                    }
+                });
             }
         };
 
@@ -128,6 +136,27 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
         adapter.stopListening();
     }
 
+    private static class viewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView orderNumber;
+        private final TextView location;
+        private final TextView price;
+        private final TextView payment;
+        private final TextView status;
+        private final LinearLayout parent;
+
+        public viewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            location = itemView.findViewById(R.id.location);
+            price = itemView.findViewById(R.id.price);
+            payment = itemView.findViewById(R.id.payment_mode);
+            status = itemView.findViewById(R.id.order_status);
+            orderNumber = itemView.findViewById(R.id.order_number);
+            parent = itemView.findViewById(R.id.parent);
+        }
+    }
+
     // Navigation Drawer Functions
     private void navigationDrawer() {
         navigationView.bringToFront();
@@ -143,7 +172,6 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
         });
         animateNavigationDrawer();
     }
-
     private void animateNavigationDrawer() {
         //Add any color or remove it to use the default one!
         //To make it transparent use Color.Transparent in side setScrimColor();
@@ -166,7 +194,6 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
@@ -175,28 +202,8 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
             super.onBackPressed();
         }
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return true;
-    }
-
-    private static class viewHolder extends RecyclerView.ViewHolder {
-
-        private final TextView orderNumber;
-        private final TextView location;
-        private final TextView price;
-        private final TextView payment;
-        private final TextView status;
-
-        public viewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            location = itemView.findViewById(R.id.location);
-            price = itemView.findViewById(R.id.price);
-            payment = itemView.findViewById(R.id.payment_mode);
-            status = itemView.findViewById(R.id.order_status);
-            orderNumber = itemView.findViewById(R.id.order_number);
-        }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -85,6 +86,7 @@
                     android:id="@+id/business_address"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:padding="4dp"
                     android:background="@drawable/rectangular_border_black"
                     android:hint="business address" />
 
@@ -116,14 +118,29 @@
                     android:text="Phone number for verification"
                     android:textColor="#000" />
 
-                <EditText
-                    android:id="@+id/phone_number"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/rectangular_border_black"
-                    android:hint="phone number"
-                    android:padding="4dp"
-                    android:text="+91 " />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/ccp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangular_border_black"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccp_showFlag="true"
+                        app:ccp_showNameCode="true" />
+
+                    <EditText
+                        android:id="@+id/phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rectangular_border_black"
+                        android:hint="Enter phone number"
+                        android:padding="4dp" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/send_code"
@@ -131,6 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:backgroundTint="@color/card1"
+                    android:onClick="callVerifyOtpScreen"
                     android:text="Send SMS"
                     android:textColor="#000" />
 
@@ -208,6 +226,7 @@
 
             <Button
                 android:id="@+id/next"
+                android:onClick="gotoPersonal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
