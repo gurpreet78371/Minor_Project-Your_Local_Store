@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WishlistActivity"></activity>
+        <activity android:name=".customer.WishlistActivity"></activity>
         <activity android:name=".shopOwner.BillingDetailsActivity" />
         <activity android:name=".shopOwner.PersonalInformationActivity" />
         <activity android:name=".shopOwner.BusinessInformationActivity" />

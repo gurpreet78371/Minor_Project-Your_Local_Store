@@ -1,4 +1,4 @@
-package com.minorproject.test;
+package com.minorproject.test.customer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -91,9 +91,9 @@ public class WishlistActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         String docID = getSnapshots().getSnapshot(position).getId();
-                        db.collection("users").document(userID)
-                                .collection("reviews").document(docID)
-                                .delete();
+                        db.collection("users")
+                                .document(userID)
+                                .collection("wishlist");
                     }
                 });
             }
