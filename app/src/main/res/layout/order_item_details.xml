@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
     <TextView
-        android:id="@+id/order_number"
+        android:id="@+id/item_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
         android:fontFamily="@font/open_sans_bold"
-        android:paddingStart="2dp"
-        android:text="No."
-        android:textSize="16sp" />
+        android:text="No." />
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.01"
+        android:background="?android:attr/listDivider" />
 
     <TextView
         android:id="@+id/item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:fontFamily="@font/open_sans_bold"
         android:paddingStart="4dp"
         android:text="Item Name"
-        android:textSize="16sp"
         tools:ignore="RtlSymmetry" />
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.01"
+        android:background="?android:attr/listDivider" />
 
     <TextView
         android:id="@+id/item_quantity"
@@ -31,11 +44,16 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:fontFamily="@font/open_sans_bold"
-        android:gravity="end"
         android:paddingStart="4dp"
         android:text="Quantity"
-        android:textSize="16sp"
         tools:ignore="RtlSymmetry" />
+
+    <View
+        android:id="@+id/divider19"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.01"
+        android:background="?android:attr/listDivider" />
 
     <TextView
         android:id="@+id/item_price"
@@ -43,9 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:fontFamily="@font/open_sans_bold"
-        android:gravity="end"
         android:paddingStart="4dp"
-        android:paddingEnd="2dp"
         android:text="Price"
-        android:textSize="16sp" />
-</TableRow>
+        tools:ignore="RtlSymmetry" />
+</LinearLayout>
