@@ -1,6 +1,7 @@
 package com.minorproject.test.shopOwner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.minorproject.test.R;
-import com.minorproject.test.model.OrderListItem;
+import com.minorproject.test.model.OrderDetails;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
     // views
     private RecyclerView orderDetailRecyclerView;
+    private TextView orderNumber, location;
 
     // Firebase
     private FirestoreRecyclerAdapter adapter;
@@ -32,37 +35,48 @@ public class OrderDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_detail);
 
         // views
-        orderDetailRecyclerView = findViewById(R.id.order_details);
+        orderDetailRecyclerView = findViewById(R.id.order_details_recycler);
+        location = findViewById(R.id.location);
+        orderNumber = findViewById(R.id.order_number);
+
+        // views
+        location.setText(getIntent().getStringExtra("location"));
 
         // Firebase
         Query query = FirebaseFirestore.getInstance()
-                .collection("orderList")
+                .collection("Orders")
                 .limit(50);
 
-        FirestoreRecyclerOptions<OrderListItem> options = new FirestoreRecyclerOptions.Builder<OrderListItem>()
-                .setQuery(query, OrderListItem.class)
+        FirestoreRecyclerOptions<OrderDetails> options = new FirestoreRecyclerOptions.Builder<OrderDetails>()
+                .setQuery(query, OrderDetails.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<OrderListItem, OrderDetailActivity.viewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<OrderDetails, viewHolder>(options) {
             @NonNull
             @Override
-            public OrderDetailActivity.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail, parent, false);
-                return new OrderDetailActivity.viewHolder(view);
+            public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item_details, parent, false);
+                return new viewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull OrderDetailActivity.viewHolder holder, int position, @NonNull OrderListItem model) {
-                holder.orderNumber.setText(position + 1 + ".");
-                holder.location.setText(model.getLocation());
+            protected void onBindViewHolder(@NonNull OrderDetailActivity.viewHolder holder, int position, @NonNull final OrderDetails model) {
+                holder.itemNumber.setText(position + 1);
                 holder.price.setText(model.getPrice());
-                holder.payment.setText(model.getPayment());
-                holder.status.setText(model.getStatus());
+                holder.quantity.setText(model.getQuantity());
+                holder.name.setText(model.getName());
+                Log.d("OrderDetailActivity", "successful    " + model.getName());
+            }
+
+            @Override
+            public void onError(FirebaseFirestoreException e) {
+                Log.e("error", e.getMessage());
             }
         };
 
         orderDetailRecyclerView.setHasFixedSize(true);
         orderDetailRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.notifyDataSetChanged();
         orderDetailRecyclerView.setAdapter(adapter);
     }
 
@@ -81,20 +95,18 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private static class viewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView orderNumber;
-        private final TextView location;
+        private final TextView itemNumber;
+        private final TextView name;
+        private final TextView quantity;
         private final TextView price;
-        private final TextView payment;
-        private final TextView status;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
 
-            location = itemView.findViewById(R.id.location);
-            price = itemView.findViewById(R.id.price);
-            payment = itemView.findViewById(R.id.payment_mode);
-            status = itemView.findViewById(R.id.order_status);
-            orderNumber = itemView.findViewById(R.id.order_number);
+            name = itemView.findViewById(R.id.item_name);
+            quantity = itemView.findViewById(R.id.item_quantity);
+            price = itemView.findViewById(R.id.item_price);
+            itemNumber = itemView.findViewById(R.id.item_number);
         }
     }
 }
