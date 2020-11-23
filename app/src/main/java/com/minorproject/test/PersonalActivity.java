@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.minorproject.test.common.MainActivity;
+import com.minorproject.test.common.DashboardActivity;
 
 public class PersonalActivity extends AppCompatActivity {
 
@@ -47,7 +47,7 @@ public class PersonalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(PersonalActivity.this, MainActivity.class));
+                startActivity(new Intent(PersonalActivity.this, DashboardActivity.class));
             }
         });
     }

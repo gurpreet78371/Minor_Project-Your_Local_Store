@@ -7,12 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
-        <item name="android:progressDrawable">@drawable/ratingstars</item>
-        <item name="android:minHeight">22dip</item>
-        <item name="android:maxHeight">22dip</item>
-    </style>
-
     <style name="navigationTheme">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>

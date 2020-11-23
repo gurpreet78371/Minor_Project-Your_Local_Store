@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="180dp"
+    android:layout_height="320dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:orientation="vertical"
+            android:paddingStart="15dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="15dp">
+
+            <ImageView
+                android:id="@+id/featured_image"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/card1" />
+
+            <TextView
+                android:id="@+id/featured_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_bold"
+                android:lineHeight="23dp"
+                android:text="McDonald's"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+            <RatingBar
+                android:id="@+id/featured_rating"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:progressTint="#000"
+                android:rating="3.5" />
+
+            <TextView
+                android:id="@+id/featured_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="4dp"
+                android:text="asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas" />
+
+            <TextView
+                android:id="@+id/featured_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Rs. 100 / item"
+                android:textColor="#000" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/fav"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#00000000"
+            android:src="@drawable/black_heart"
+            android:visibility="gone"
+            app:tint="#000" />
+
+        <ImageView
+            android:id="@+id/no_fav"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#00000000"
+            android:src="@drawable/heart"
+            app:tint="#000" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -3,16 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:id="@+id/parent"
+    android:padding="2dp">
 
     <TextView
-        android:id="@+id/item_number"
+        android:id="@+id/order_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
         android:fontFamily="@font/open_sans_bold"
-        android:text="No." />
+        android:text="1." />
 
     <View
         android:id="@+id/divider6"
@@ -22,13 +24,13 @@
         android:background="?android:attr/listDivider" />
 
     <TextView
-        android:id="@+id/item_name"
+        android:id="@+id/location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="2.5"
         android:fontFamily="@font/open_sans_bold"
         android:paddingStart="4dp"
-        android:text="Item Name"
+        android:text="Sector 5, Chandigar"
         tools:ignore="RtlSymmetry" />
 
     <View
@@ -39,29 +41,47 @@
         android:background="?android:attr/listDivider" />
 
     <TextView
-        android:id="@+id/item_quantity"
+        android:id="@+id/price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:fontFamily="@font/open_sans_bold"
         android:paddingStart="4dp"
-        android:text="Quantity"
+        android:text="100/-"
         tools:ignore="RtlSymmetry" />
 
     <View
-        android:id="@+id/divider19"
+        android:id="@+id/divider8"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="0.01"
         android:background="?android:attr/listDivider" />
 
     <TextView
-        android:id="@+id/item_price"
+        android:id="@+id/payment_mode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:fontFamily="@font/open_sans_bold"
         android:paddingStart="4dp"
-        android:text="Price"
+        android:text="COD"
         tools:ignore="RtlSymmetry" />
+
+    <View
+        android:id="@+id/divider9"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.01"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/order_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:fontFamily="@font/open_sans_bold"
+        android:paddingStart="4dp"
+        android:text="See Order"
+        tools:ignore="RtlSymmetry" />
+
 </LinearLayout>

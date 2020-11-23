@@ -1,28 +1,30 @@
 package com.minorproject.test.model;
 
 public class Category {
-    Integer id;
-    int imageurl;
+    String name;
+    String imageUrl;
 
-    public Category(Integer id, int imageurl) {
-        this.id = id;
-        this.imageurl = imageurl;
+    public Category() {
     }
 
-    public Integer getId() {
-        return id;
+    public Category(String name, String imageUrl) {
+        this.name = name;
+        this.imageUrl = imageUrl;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
-    public int getImageurl() {
-        return imageurl;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setImageurl(int imageurl) {
-        this.imageurl = imageurl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

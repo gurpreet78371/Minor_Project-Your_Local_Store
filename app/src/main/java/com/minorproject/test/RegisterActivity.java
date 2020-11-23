@@ -13,15 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.minorproject.test.common.LoginActivity;
 import com.minorproject.test.customer.HomeActivity;
-import com.minorproject.test.model.User;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -76,7 +79,6 @@ public class RegisterActivity extends AppCompatActivity {
                     mLoadingBar.setMessage("Please wait...");
                     mLoadingBar.setCanceledOnTouchOutside(false);
                     mLoadingBar.show();
-                    System.out.println(email + " " + password);
                     mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -85,23 +87,33 @@ public class RegisterActivity extends AppCompatActivity {
                                         Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
 //                                recreate();
                                     } else {
-                                        User user = new User(name, "0", "0", "customer", "0", email);
-                                        FirebaseDatabase.getInstance().getReference("Users")
-                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .setValue(user).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
-                                                } else {
-                                                    Toast.makeText(RegisterActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("customerName", name);
+                                        user.put("email", email);
+                                        user.put("isCustomer", 1);
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        db.collection("Users").document(FirebaseAuth.getInstance().getUid())
+                                                .set(user)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        mLoadingBar.dismiss();
+                                                        Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                                                        finish();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        mLoadingBar.dismiss();
+                                                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                     }
                                 }
                             });
+                    mLoadingBar.dismiss();
                 }
             }
         });
@@ -109,7 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                intent.putExtra("user", "customer");
+                startActivity(intent);
             }
         });
     }

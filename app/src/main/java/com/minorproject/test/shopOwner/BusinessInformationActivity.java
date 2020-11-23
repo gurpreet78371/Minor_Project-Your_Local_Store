@@ -38,8 +38,10 @@ public class BusinessInformationActivity extends AppCompatActivity {
     PinView pinFromUser;
 
     // views
-    private EditText businessRegistrationNumber, businessAddress, phoneNumber, firstName, middleName, lastName;
+    private EditText businessRegistrationNumber, businessAddress, phoneNumber, firstName, middleName, lastName, email;
     private Button sendSMS, next;
+    private TextView verificationText;
+
     // firebase
     FirebaseAuth mAuth;
     private String codeBySystem;
@@ -83,6 +85,8 @@ public class BusinessInformationActivity extends AppCompatActivity {
         lastName = findViewById(R.id.last_name);
         sendSMS = findViewById(R.id.send_code);
         next = findViewById(R.id.next);
+        verificationText = findViewById(R.id.verification_msg1);
+        email = findViewById(R.id.email);
 
         // country code picker
         countryCodePicker = findViewById(R.id.ccp);
@@ -103,27 +107,29 @@ public class BusinessInformationActivity extends AppCompatActivity {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.verify_otp_dialog);
 
-            TextView text = (TextView) dialog.findViewById(R.id.verification_msg);
+            TextView text = dialog.findViewById(R.id.verification_msg);
             text.setText("Enter one time password sent on " + _phoneNo);
 
-            pinFromUser = (PinView) dialog.findViewById(R.id.otp);
+            pinFromUser = dialog.findViewById(R.id.otp);
 
             sendVerificationCodeToUser(_phoneNo);
 
-            Button dialogButton = (Button) dialog.findViewById(R.id.submit_otp);
+            Button dialogButton = dialog.findViewById(R.id.submit_otp);
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String code = pinFromUser.getText().toString();
                     if (!code.isEmpty()) {
-                        verifyCode(code);
+//                        verifyCode(code);
+                        verificationText.setVisibility(View.VISIBLE);
+                        findViewById(R.id.send_code).setVisibility(View.GONE);
                     }
 //                        Toast.makeText(BusinessInformationActivity.this, dialog.findViewById(R.id.otp).getT, Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
 
-            ImageView cancel = (ImageView) dialog.findViewById(R.id.cancel_action);
+            ImageView cancel = dialog.findViewById(R.id.cancel_action);
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -175,6 +181,14 @@ public class BusinessInformationActivity extends AppCompatActivity {
     }
 
     public void gotoPersonal(View view) {
-        startActivity(new Intent(BusinessInformationActivity.this, PersonalInformationActivity.class));
+        Intent intent = new Intent(BusinessInformationActivity.this, PersonalInformationActivity.class);
+        intent.putExtra("registrationNumber", businessRegistrationNumber.getText().toString());
+        intent.putExtra("businessAddress", businessAddress.getText().toString());
+        intent.putExtra("phoneNumber", phoneNumber.getText().toString());
+        intent.putExtra("firstName", firstName.getText().toString());
+        intent.putExtra("middleName", middleName.getText().toString());
+        intent.putExtra("lastName", lastName.getText().toString());
+        intent.putExtra("email", email.getText().toString());
+        startActivity(intent);
     }
 }

@@ -17,7 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.minorproject.test.common.MainActivity;
+import com.minorproject.test.customer.HomeActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -105,7 +105,7 @@ public class ReviewActivity extends AppCompatActivity {
             }
         });
 
-        startActivity(new Intent(ReviewActivity.this, MainActivity.class));
+        startActivity(new Intent(ReviewActivity.this, HomeActivity.class));
     }
 
     private void updateRatingDoc(Double rating) {

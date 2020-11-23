@@ -24,8 +24,9 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.minorproject.test.OrderActivity;
 import com.minorproject.test.R;
-import com.minorproject.test.model.OrderListItem;
+import com.minorproject.test.model.OrderList;
 
 public class OrderListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -72,30 +73,32 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
                 .collection("orderList")
                 .limit(50);
 
-        FirestoreRecyclerOptions<OrderListItem> options = new FirestoreRecyclerOptions.Builder<OrderListItem>()
-                .setQuery(query, OrderListItem.class)
+        FirestoreRecyclerOptions<OrderList> options = new FirestoreRecyclerOptions.Builder<OrderList>()
+                .setQuery(query, OrderList.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<OrderListItem, viewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<OrderList, viewHolder>(options) {
             @NonNull
             @Override
             public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_list_layout, parent, false);
                 return new viewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull final OrderListItem model) {
-                holder.orderNumber.setText(position + 1 + ".");
+            protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull final OrderList model) {
+                holder.orderNumber.setText(model.getOrderNumber());
                 holder.location.setText(model.getLocation());
-                holder.price.setText(model.getPrice());
-                holder.payment.setText(model.getPayment());
+                holder.price.setText(model.getTotalPrice());
+                holder.payment.setText(model.getPaymentMode());
                 holder.status.setText(model.getStatus());
                 holder.parent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
-//                        intent.putExtra("itemName", model.getOrderItems()));
+                        Intent intent = new Intent(OrderListActivity.this, OrderActivity.class);
+                        intent.putExtra("location", model.getLocation());
+                        intent.putExtra("totalAmount", model.getTotalPrice());
+                        intent.putExtra("orderNumber", model.getOrderNumber());
                         startActivity(intent);
                     }
                 });
@@ -103,7 +106,7 @@ public class OrderListActivity extends AppCompatActivity implements NavigationVi
         };
 
         orderListRecyclerView.setHasFixedSize(true);
-        orderListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        orderListRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         orderListRecyclerView.setAdapter(adapter);
     }
 

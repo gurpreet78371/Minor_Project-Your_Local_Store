@@ -1,65 +1,64 @@
 package com.minorproject.test.customer;
 
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.minorproject.test.PersonalActivity;
 import com.minorproject.test.R;
-import com.minorproject.test.adapter.CategoryAdapter;
-import com.minorproject.test.adapter.DiscountedProductAdapter;
-import com.minorproject.test.adapter.RecentlyViewedAdapter;
 import com.minorproject.test.common.LoginActivity;
 import com.minorproject.test.model.Category;
-import com.minorproject.test.model.DiscountedProducts;
-import com.minorproject.test.model.RecentlyViewed;
+import com.minorproject.test.model.Product;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final float END_SCALE = 0.7f;
     // variables
+    private static final float END_SCALE = 0.7f;
+    private static final String TAG = "HomeActivity";
     private final String searchText = "";
+
     // views
     private TextView allCategory;
     private LinearLayout loginLayout;
     private Button gotoLogin;
-    private EditText searchBar;
-    private ImageView cart, search, gotoPersonal, mainMenu;
-    private RecyclerView discountRecyclerView, categoryRecyclerView, recentlyViewedRecycler;
+    private ImageView cart, gotoPersonal, mainMenu;
+    private RecyclerView discountRecyclerView, categoryRecyclerView, recentlyViewedRecycler, moreProducts;
     private LinearLayout contentView;
-    private RecentlyViewedAdapter recentlyViewedAdapter;
+
     // adapters
-    private CategoryAdapter categoryAdapter;
-    private DiscountedProductAdapter adapter;
-    private List<RecentlyViewed> recentlyViewedList;
-    // adapter lists
-    private List<Category> categoryList;
-    private FirebaseFirestore db;
+    private FirestoreRecyclerAdapter categoryAdapter, discountedAdapter, recentlyAdapter, moreAdapter;
+
     // firebase
+    private FirebaseFirestore db;
     private FirebaseUser user;
+
     // Drawer menu
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -77,17 +76,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         categoryRecyclerView = findViewById(R.id.categoryRecycler);
         allCategory = findViewById(R.id.allCategoryImage);
         recentlyViewedRecycler = findViewById(R.id.recently_item);
+        moreProducts = findViewById(R.id.more_products);
 
         // navigation
-        cart = findViewById(R.id.myCart);
+        cart = findViewById(R.id.cart);
         loginLayout = findViewById(R.id.loginMessage);
         gotoLogin = findViewById(R.id.gotoLogin);
         gotoPersonal = findViewById(R.id.goto_personal);
         mainMenu = findViewById(R.id.main_menu);
-
-        // search
-        searchBar = findViewById(R.id.editText);
-        search = findViewById(R.id.search);
 
         // firebase
         db = FirebaseFirestore.getInstance();
@@ -97,13 +93,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navigation_view);
 
         navigationDrawer();
-//        search.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                searchText = searchBar.getText().toString();
-//                Toast.makeText(HomeActivity.this, searchText, Toast.LENGTH_LONG).show();
-//            }
-//        });
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -125,85 +114,246 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if (user != null) {
                     startActivity(new Intent(HomeActivity.this, PersonalActivity.class));
                 } else {
-                    startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    intent.putExtra("user", "customer");
+                    startActivity(intent);
                 }
             }
         });
 
-//        cart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(HomeActivity.this, MyCartActivity.class));
-//            }
-//        });
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user != null) {
+                    startActivity(new Intent(HomeActivity.this, MyCartActivity.class));
+                } else {
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    intent.putExtra("user", "customer");
+                    startActivity(intent);
+                }
+            }
+        });
 
         gotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                intent.putExtra("user", "customer");
+                startActivity(intent);
             }
         });
 
-        FirebaseRecyclerOptions<DiscountedProducts> options =
-                new FirebaseRecyclerOptions.Builder<DiscountedProducts>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Category"), DiscountedProducts.class)
-                        .build();
+        // Firebase
+        // category recycler
+        final Query query = FirebaseFirestore.getInstance()
+                .collection("Categories")
+                .limit(10);
+        Query query1 = FirebaseFirestore.getInstance()
+                .collection("RecentlyViewed")
+                .limit(50);
+        Query query2 = FirebaseFirestore.getInstance()
+                .collection("Product")
+                .orderBy("discount", Query.Direction.DESCENDING)
+                .limit(20);
+        Query query3 = FirebaseFirestore.getInstance()
+                .collection("Products")
+                .limit(50);
 
-        adapter = new DiscountedProductAdapter(options, HomeActivity.this);
+        FirestoreRecyclerOptions<Category> options = new FirestoreRecyclerOptions.Builder<Category>()
+                .setQuery(query, Category.class)
+                .build();
+        FirestoreRecyclerOptions<Product> options1 = new FirestoreRecyclerOptions.Builder<Product>()
+                .setQuery(query1, Product.class)
+                .build();
+        FirestoreRecyclerOptions<Product> options2 = new FirestoreRecyclerOptions.Builder<Product>()
+                .setQuery(query2, Product.class)
+                .build();
+        FirestoreRecyclerOptions<Product> options3 = new FirestoreRecyclerOptions.Builder<Product>()
+                .setQuery(query3, Product.class)
+                .build();
 
-//        db.collection("products")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                                discountedProductsList.add(new DiscountedProducts(document.getId(), document.getString(getString(R.string.NAME_KEY))));
-//                            }
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
+        categoryAdapter = new FirestoreRecyclerAdapter<Category, categoryViewHolder>(options) {
+            @NonNull
+            @Override
+            public categoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                Log.d(TAG, "onBindViewHolder: " + query);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_row_items, parent, false);
+                return new categoryViewHolder(view);
+            }
 
-//         adding data to model
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category(1, R.drawable.ic_fruits));
-        categoryList.add(new Category(2, R.drawable.ic_home_fish));
-        categoryList.add(new Category(3, R.drawable.ic_meat));
-        categoryList.add(new Category(4, R.drawable.ic_veggies));
-        categoryList.add(new Category(5, R.drawable.ic_fruits));
-        categoryList.add(new Category(6, R.drawable.ic_home_fish));
-        categoryList.add(new Category(7, R.drawable.ic_meat));
-        categoryList.add(new Category(8, R.drawable.ic_veggies));
-//        db.collection("products")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                                categoryList.add(new Category(document.getId(), document.getString(getString(R.string.NAME_KEY))));
-//                                //Log.d(TAG, "Here " + discountedProductsList.size() + "\n");
-//                            }
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
+            @Override
+            protected void onBindViewHolder(@NonNull categoryViewHolder holder, int position, @NonNull final Category model) {
+                Log.d(TAG, "onBindViewHolder: " + query);
+                holder.name.setText(model.getName());
+//                Picasso.with(getApplicationContext()).load(model.getImageUrl()).into(holder.image);
+            }
+        };
+        categoryAdapter.notifyDataSetChanged();
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        categoryRecyclerView.setAdapter(categoryAdapter);
+        discountedAdapter = new FirestoreRecyclerAdapter<Product, discountedViewHolder>(options3) {
+            @NonNull
+            @Override
+            public discountedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.discounted_row_items, parent, false);
+                return new discountedViewHolder(view);
+            }
 
-        // adding data to model
-        recentlyViewedList = new ArrayList<>();
-        recentlyViewedList.add(new RecentlyViewed("Watermelon", "Watermelon has high water content and also provides some fiber.", "₹ 80", "1", "KG", "card4"));
-        recentlyViewedList.add(new RecentlyViewed("Papaya", "Papayas are spherical or pear-shaped fruits that can be as long as 20 inches.", "₹ 85", "1", "KG", "card3"));
-        recentlyViewedList.add(new RecentlyViewed("Strawberry", "The strawberry is a highly nutritious fruit, loaded with vitamin C.", "₹ 30", "1", "KG", "card2"));
-        recentlyViewedList.add(new RecentlyViewed("Kiwi", "Full of nutrients like vitamin C, vitamin K, vitamin E, folate, and potassium.", "₹ 30", "1", "PC", "card1"));
+            @Override
+            protected void onBindViewHolder(@NonNull final discountedViewHolder holder, int position, @NonNull final Product model) {
+                holder.name.setText(model.getName());
+                String _actualPrice = String.valueOf(model.getPrice());
+                holder.actualPrice.setText(_actualPrice);
+                final String _discountPrice = String.valueOf(model.getPrice() - model.getDiscount());
+                holder.discount.setText(_discountPrice);
+                String _rating = String.valueOf(model.getRating());
+//                holder.ratingBar.setRating(Float.parseFloat(_rating));
+                final String id = getSnapshots().getSnapshot(position).getId();
+                holder.fav.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        removeFromFav(id);
+                        holder.fav.setVisibility(View.INVISIBLE);
+                        holder.noFav.setVisibility(View.VISIBLE);
+                    }
+                });
+                holder.noFav.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addToFav(id, model.getName(), model.getPrice(), model.getDescription(), model.getImageUrls());
+                        holder.fav.setVisibility(View.VISIBLE);
+                        holder.noFav.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+        };
+        moreAdapter = new FirestoreRecyclerAdapter<Product, moreViewHolder>(options3) {
+            @NonNull
+            @Override
+            public moreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.featured_card_design, parent, false);
+                return new moreViewHolder(view);
+            }
 
-        setDiscountedRecycler();
-        setCategoryRecycler(categoryList);
-        setRecentlyViewedRecycler(recentlyViewedList);
+            @Override
+            protected void onBindViewHolder(@NonNull moreViewHolder holder, int position, @NonNull final Product model) {
+                holder.name.setText(model.getName());
+                String _price = String.valueOf(model.getPrice());
+                holder.price.setText(_price);
+//                holder.ratingBar.setRating((float) model.getRating());
+                holder.description.setText(model.getDescription());
+            }
+        };
+        recentlyAdapter = new FirestoreRecyclerAdapter<Product, recentlyViewHolder>(options3) {
+            @NonNull
+            @Override
+            public recentlyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.featured_card_design, parent, false);
+                return new recentlyViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull recentlyViewHolder holder, int position, @NonNull final Product model) {
+            }
+        };
+
+        discountedAdapter.notifyDataSetChanged();
+        discountRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        discountRecyclerView.setAdapter(discountedAdapter);
+
+        moreAdapter.notifyDataSetChanged();
+        moreProducts.setLayoutManager(new GridLayoutManager(this, 2));
+        moreProducts.setAdapter(moreAdapter);
+
+        recentlyAdapter.notifyDataSetChanged();
+        recentlyViewedRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recentlyViewedRecycler.setAdapter(recentlyAdapter);
+    }
+
+    private void addToFav(String id, String name, double price, String description, String[] imageUrls) {
+        Map<String, Object> item = new HashMap<>();
+        item.put("productID", id);
+        item.put("name", name);
+        item.put("price", price);
+        item.put("description", description);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("favourites")
+                .document(id)
+                .set(item);
+    }
+
+    private void removeFromFav(String id) {
+        db.collection("Users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("favourites")
+                .document(id)
+                .delete();
+    }
+
+    public void gotoRecommended(View view) {
+    }
+
+    public void showTopDeals(View view) {
+    }
+
+    public void gotoWishList(View view) {
+        startActivity(new Intent(HomeActivity.this, MyFavouriteActivity.class));
+    }
+
+    public void showNewlyAdded(View view) {
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        categoryAdapter.startListening();
+        discountedAdapter.startListening();
+        moreAdapter.startListening();
+        recentlyAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        categoryAdapter.stopListening();
+        discountedAdapter.stopListening();
+        moreAdapter.stopListening();
+        recentlyAdapter.stopListening();
+    }
+
+    public static class categoryViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView name;
+        private final ImageView image;
+
+        public categoryViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.name);
+            image = itemView.findViewById(R.id.categoryImage);
+        }
+    }
+
+    public static class discountedViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView name;
+        private final TextView actualPrice;
+        private final TextView discount;
+        private final ImageView fav;
+        private final ImageView noFav;
+        private ImageView image;
+        private RatingBar ratingBar;
+
+        public discountedViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            name = itemView.findViewById(R.id.discounted_title);
+            actualPrice = itemView.findViewById(R.id.discounted_actual_price);
+            discount = itemView.findViewById(R.id.discounted_discount);
+            fav = itemView.findViewById(R.id.fav);
+            noFav = itemView.findViewById(R.id.no_fav);
+        }
     }
 
     // Navigation Drawer Functions
@@ -259,33 +409,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    // Recycler functions
-    private void setDiscountedRecycler() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        discountRecyclerView.setLayoutManager(layoutManager);
-        discountRecyclerView.setAdapter(adapter);
+    public static class moreViewHolder extends RecyclerView.ViewHolder {
+
+        private final ImageView productImage;
+        private final TextView name;
+        private final TextView description;
+        private final TextView price;
+        private final RatingBar ratingBar;
+
+        public moreViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            productImage = itemView.findViewById(R.id.featured_image);
+            name = itemView.findViewById(R.id.featured_title);
+            description = itemView.findViewById(R.id.featured_desc);
+            ratingBar = itemView.findViewById(R.id.featured_rating);
+            price = itemView.findViewById(R.id.featured_price);
+        }
     }
 
-    private void setCategoryRecycler(List<Category> categoryDataList) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        categoryRecyclerView.setLayoutManager(layoutManager);
-        categoryAdapter = new CategoryAdapter(this, categoryDataList);
-        categoryRecyclerView.setAdapter(categoryAdapter);
-    }
-    private void setRecentlyViewedRecycler(List<RecentlyViewed> recentlyViewedDataList) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recentlyViewedRecycler.setLayoutManager(layoutManager);
-        recentlyViewedAdapter = new RecentlyViewedAdapter(this, recentlyViewedDataList);
-        recentlyViewedRecycler.setAdapter(recentlyViewedAdapter);
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+    public static class recentlyViewHolder extends RecyclerView.ViewHolder {
+
+        public recentlyViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
     }
 }

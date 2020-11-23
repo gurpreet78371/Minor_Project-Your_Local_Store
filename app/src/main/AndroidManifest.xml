@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -19,14 +21,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".customer.WishlistActivity"></activity>
+        <activity android:name=".customer.MyFavouriteActivity"></activity>
+        <activity android:name=".OrderActivity" />
+        <activity android:name=".customer.WishlistActivity" />
         <activity android:name=".shopOwner.BillingDetailsActivity" />
         <activity android:name=".shopOwner.PersonalInformationActivity" />
         <activity android:name=".shopOwner.BusinessInformationActivity" />
         <activity android:name=".shopOwner.ShopOwnerRequirementsActivity" />
         <activity android:name=".common.DashboardActivity" />
         <activity android:name=".common.OnBoardActivity" />
-        <activity android:name=".shopOwner.OrderDetailActivity" />
         <activity android:name=".shopOwner.OrderListActivity" />
         <activity android:name=".shopOwner.VendorProfileActivity" />
 
@@ -44,11 +47,12 @@
         <activity android:name=".common.ConfirmEmailActivity" />
         <activity android:name=".customer.AllCategoryActivity" />
         <activity android:name=".ProductDetailsActivity" />
-        <activity android:name=".SettingActivity" />
         <activity android:name=".customer.HomeActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".common.LoginActivity" />
-        <activity android:name=".common.MainActivity">
+        <activity
+            android:name=".common.MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

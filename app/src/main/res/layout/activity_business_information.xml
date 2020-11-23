@@ -55,7 +55,7 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/divider14"
+                android:id="@+id/divider114"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="16dp"
@@ -75,13 +75,6 @@
                     android:text="Registered business address"
                     android:textColor="#000" />
 
-                <!--                <Button-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:backgroundTint="@color/card1"-->
-                <!--                    android:text="Select business address"-->
-                <!--                    android:textColor="#000" />-->
-
                 <EditText
                     android:id="@+id/business_address"
                     android:layout_width="match_parent"
@@ -89,6 +82,42 @@
                     android:padding="4dp"
                     android:background="@drawable/rectangular_border_black"
                     android:hint="business address" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider14"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/email_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Email address"
+                    android:textColor="#000" />
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangular_border_black"
+                    android:hint="email address"
+                    android:padding="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -151,6 +180,17 @@
                     android:onClick="callVerifyOtpScreen"
                     android:text="Send SMS"
                     android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/verification_msg1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_done_all_24"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Phone Number Verified"
+                    android:textColor="@color/fbutton_color_green_sea"
+                    android:visibility="gone"
+                    app:drawableTint="@color/fbutton_color_green_sea" />
 
             </LinearLayout>
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.minorproject.test.adapter.SliderAdapterExample;
-import com.minorproject.test.common.MainActivity;
+import com.minorproject.test.customer.HomeActivity;
 import com.minorproject.test.customer.MyCartActivity;
 import com.minorproject.test.model.Review;
 import com.minorproject.test.model.SliderItem;
@@ -119,9 +120,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 .setQuery(query, Review.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<Review, ShowReviewActivity.newReviewsHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<Review, newReviewsHolder>(options) {
             @Override
-            public void onBindViewHolder(@NotNull ShowReviewActivity.newReviewsHolder holder, final int position, @NotNull final Review model) {
+            public void onBindViewHolder(@NotNull newReviewsHolder holder, final int position, @NotNull final Review model) {
                 holder.txtUser.setText(model.getUser());
                 holder.txtReview.setText(model.getReview());
                 double stars = model.getRating();
@@ -148,11 +149,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             @NotNull
             @Override
-            public ShowReviewActivity.newReviewsHolder onCreateViewHolder(@NotNull ViewGroup group, int i) {
+            public newReviewsHolder onCreateViewHolder(@NotNull ViewGroup group, int i) {
                 View view = LayoutInflater.from(group.getContext())
                         .inflate(R.layout.review_list_item, group, false);
 
-                return new ShowReviewActivity.newReviewsHolder(view);
+                return new newReviewsHolder(view);
             }
 
             @Override
@@ -168,7 +169,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(ProductDetailsActivity.this, MainActivity.class);
+                Intent i = new Intent(ProductDetailsActivity.this, HomeActivity.class);
                 startActivity(i);
                 finish();
 
@@ -185,6 +186,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         SliderItem sliderItem = new SliderItem();
         sliderItem.setImageUrl("https://tinyjpg.com/images/social/website.jpg");
         sliderAdapter.addItem(sliderItem);
+    }
+
+    public void addToCart(View view) {
+
     }
 
     private class ClickListener implements View.OnClickListener {
@@ -206,28 +211,28 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
-//    public static class newReviewsHolder extends RecyclerView.ViewHolder {
-//
-//        TextView txtUser, txtReview;
-//        RatingBar ratingBar;
-//
-//        public newReviewsHolder(View itemView) {
-//            super(itemView);
-//            txtUser = itemView.findViewById(R.id.txtUser);
-//            txtReview = itemView.findViewById(R.id.txtReview);
-//            ratingBar = itemView.findViewById(R.id.ratingBar);
-//        }
-//    }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        adapter.startListening();
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        adapter.stopListening();
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    public static class newReviewsHolder extends RecyclerView.ViewHolder {
+
+        TextView txtUser, txtReview;
+        RatingBar ratingBar;
+
+        public newReviewsHolder(View itemView) {
+            super(itemView);
+            txtUser = itemView.findViewById(R.id.txtUser);
+            txtReview = itemView.findViewById(R.id.txtReview);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+        }
+    }
 }

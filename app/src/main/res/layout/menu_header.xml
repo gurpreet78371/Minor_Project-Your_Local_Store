@@ -10,11 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/our_moto" />
 
     <TextView
         android:id="@+id/app_name"
+        android:layout_marginBottom="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/menu_slogan"
@@ -23,18 +24,18 @@
         android:textColor="#000"
         android:textSize="24dp" />
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_above="@+id/app_name"
-        android:src="@drawable/ic_person" />
+    <!--    <ImageView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wr"-->
+    <!--        android:layout_above="@+id/app_name"-->
+    <!--        android:src="@drawable/logo" />-->
 
     <ImageView
-        android:layout_width="160dp"
-        android:layout_height="175dp"
+        android:layout_width="130dp"
+        android:layout_height="140dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:paddingEnd="4dp"
-        android:src="@drawable/grocery" />
+        android:src="@drawable/logo" />
 
 </RelativeLayout>

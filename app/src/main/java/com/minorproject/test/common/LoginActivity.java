@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,9 +23,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.minorproject.test.R;
 import com.minorproject.test.RegisterActivity;
 import com.minorproject.test.customer.HomeActivity;
+import com.minorproject.test.shopOwner.OrderListActivity;
+import com.minorproject.test.shopOwner.ShopOwnerRequirementsActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -63,10 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 if (mFirebaseUser != null) {
-                    Toast.makeText(LoginActivity.this, "You are logged In...", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                } else {
-                    Toast.makeText(LoginActivity.this, "Please LogIn...", Toast.LENGTH_SHORT).show();
+                    checkUserLevel();
                 }
             }
         };
@@ -93,10 +96,11 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                checkUserLevel();
                             } else {
                                 Toast.makeText(LoginActivity.this, "Login Error, please try again", Toast.LENGTH_SHORT).show();
                             }
+                            mLoadingBar.dismiss();
                         }
                     });
                 }
@@ -108,7 +112,11 @@ public class LoginActivity extends AppCompatActivity {
         gotoRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                String type = getIntent().getStringExtra("user");
+                if (type != null && type.equals("shopOwner")) {
+                    startActivity(new Intent(LoginActivity.this, ShopOwnerRequirementsActivity.class));
+                } else
+                    startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
@@ -146,6 +154,29 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
                 passwordResetDialog.create().show();
+            }
+        });
+    }
+
+    private void checkUserLevel() {
+        final DocumentReference reference = FirebaseFirestore.getInstance().collection("Users").document(FirebaseAuth.getInstance().getUid());
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String type = documentSnapshot.getString("isShopOwner");
+                if (type != null) {
+                    Log.d("TAG", "onSuccess: ................................................");
+                    startActivity(new Intent(LoginActivity.this, OrderListActivity.class));
+                } else {
+                    Log.d("TAG", "onSuccess: ////////////////////////////////////////");
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                }
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(LoginActivity.this, "Login Error, please try again", Toast.LENGTH_SHORT).show();
             }
         });
     }

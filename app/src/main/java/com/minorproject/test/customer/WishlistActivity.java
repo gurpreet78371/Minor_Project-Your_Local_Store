@@ -1,10 +1,5 @@
 package com.minorproject.test.customer;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.snackbar.Snackbar;
@@ -64,11 +63,11 @@ public class WishlistActivity extends AppCompatActivity {
             @Override
             public void onBindViewHolder(newProductsHolder holder, final int position, final Product model) {
                 holder.txtName.setText(model.getName());
-                holder.txtPrice.setText(model.getPrice());
+//                holder.txtPrice.setText(model.getPrice());
 
-                Glide.with(getApplicationContext())
-                        .load(model.getImg())
-                        .into(holder.img);
+//                Glide.with(getApplicationContext())
+//                        .load(model.getImg())
+//                        .into(holder.img);
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -93,7 +92,7 @@ public class WishlistActivity extends AppCompatActivity {
                         String docID = getSnapshots().getSnapshot(position).getId();
                         db.collection("users")
                                 .document(userID)
-                                .collection("wishlist");
+                                .collection("wishlist").document(docID).delete();
                     }
                 });
             }
