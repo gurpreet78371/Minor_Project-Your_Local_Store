@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="160dp"
-    android:layout_height="wrap_content"
+    android:layout_width="210dp"
+    android:layout_height="320dp"
     android:layout_margin="10dp"
     app:cardCornerRadius="2dp"
     app:cardElevation="8dp">
@@ -14,90 +14,104 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="280dp"
             android:orientation="vertical"
-            android:padding="15dp">
+            android:paddingStart="15dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="15dp">
 
             <ImageView
-                android:id="@+id/dicounted_image"
+                android:id="@+id/featured_image"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/card1" />
 
             <TextView
-                android:id="@+id/discounted_title"
+                android:id="@+id/featured_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
                 android:lineHeight="23dp"
                 android:text="McDonald's"
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <RatingBar
-                android:id="@+id/discounted_rating"
+                android:id="@+id/featured_rating"
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:progressTint="#000"
                 android:rating="3.5" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/featured_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="4dp"
+                android:text="asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/featured_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:text="Rs. "
+                android:textColor="#000" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/featured_price"
+                    android:id="@+id/discounted_actual_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rs. "
-                    android:textColor="#000" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/discounted_actual_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="100"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/red"
-                        app:layout_constraintBottom_toBottomOf="@+id/discounted_actual_price"
-                        app:layout_constraintEnd_toEndOf="@+id/discounted_actual_price"
-                        app:layout_constraintStart_toStartOf="@+id/discounted_actual_price"
-                        app:layout_constraintTop_toTopOf="@+id/discounted_actual_price" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="100"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="4dp"
-                    android:background="@color/grey" />
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/red"
+                    app:layout_constraintBottom_toBottomOf="@+id/discounted_actual_price"
+                    app:layout_constraintEnd_toEndOf="@+id/discounted_actual_price"
+                    app:layout_constraintStart_toStartOf="@+id/discounted_actual_price"
+                    app:layout_constraintTop_toTopOf="@+id/discounted_actual_price" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/discounted_discount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="90" />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:background="@color/grey" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="/-" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/discounted_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="90" />
+
+            <TextView
+                android:id="@+id/unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / Kg" />
         </LinearLayout>
 
         <ImageView
@@ -125,5 +139,4 @@
             android:src="@drawable/heart"
             app:tint="#000" />
     </RelativeLayout>
-
 </androidx.cardview.widget.CardView>

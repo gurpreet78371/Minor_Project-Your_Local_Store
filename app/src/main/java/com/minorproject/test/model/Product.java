@@ -1,5 +1,7 @@
 package com.minorproject.test.model;
 
+import java.util.List;
+
 public class Product {
     String name;
     String description;
@@ -7,15 +9,16 @@ public class Product {
     double price;
     double discount;
     String discountType;
-    String[] imageUrls;
+    List<String> imageUrls;
     String vendorID;
     String reviewsID;
     String productID;
+    String unit;
 
     public Product() {
     }
 
-    public Product(String name, String description, double rating, double price, double discount, String discountType, String[] imageUrls, String vendorID, String reviewsID, String productID) {
+    public Product(String name, String description, double rating, double price, double discount, String discountType, List<String> imageUrls, String vendorID, String reviewsID, String productID, String unit) {
         this.name = name;
         this.description = description;
         this.rating = rating;
@@ -26,14 +29,7 @@ public class Product {
         this.vendorID = vendorID;
         this.reviewsID = reviewsID;
         this.productID = productID;
-    }
-
-    public String getProductID() {
-        return productID;
-    }
-
-    public void setProductID(String productID) {
-        this.productID = productID;
+        this.unit = unit;
     }
 
     public String getName() {
@@ -84,11 +80,11 @@ public class Product {
         this.discountType = discountType;
     }
 
-    public String[] getImageUrls() {
+    public List<String> getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(String[] imageUrls) {
+    public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
 
@@ -106,5 +102,21 @@ public class Product {
 
     public void setReviewsID(String reviewsID) {
         this.reviewsID = reviewsID;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

@@ -23,18 +23,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.minorproject.test.PersonalActivity;
+import com.minorproject.test.ProductDetailsActivity;
 import com.minorproject.test.R;
 import com.minorproject.test.common.LoginActivity;
 import com.minorproject.test.model.Category;
 import com.minorproject.test.model.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -206,9 +213,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 holder.actualPrice.setText(_actualPrice);
                 final String _discountPrice = String.valueOf(model.getPrice() - model.getDiscount());
                 holder.discount.setText(_discountPrice);
-                String _rating = String.valueOf(model.getRating());
-//                holder.ratingBar.setRating(Float.parseFloat(_rating));
+                holder.description.setText(model.getDescription());
+//                String _rating = String.valueOf(model.getRating());
+//                holder.ratingBar.setRating((float) model.getRating());
                 final String id = getSnapshots().getSnapshot(position).getId();
+                Picasso.with(getApplicationContext()).load(model.getImageUrls().get(0)).into(holder.image);
+//                if(wishListContains(id)){
+//                    holder.fav.setVisibility(View.VISIBLE);
+//                    holder.noFav.setVisibility(View.INVISIBLE);
+//                }
+//                else {
+//                    holder.fav.setVisibility(View.INVISIBLE);
+//                    holder.noFav.setVisibility(View.VISIBLE);
+//                }
                 holder.fav.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -225,6 +242,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         holder.noFav.setVisibility(View.INVISIBLE);
                     }
                 });
+                holder.parent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(HomeActivity.this, ProductDetailsActivity.class);
+                        intent.putExtra("productID", id);
+                        startActivity(intent);
+                    }
+                });
             }
         };
         moreAdapter = new FirestoreRecyclerAdapter<Product, moreViewHolder>(options3) {
@@ -238,10 +263,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             protected void onBindViewHolder(@NonNull moreViewHolder holder, int position, @NonNull final Product model) {
                 holder.name.setText(model.getName());
-                String _price = String.valueOf(model.getPrice());
+                String _price = "Rs. " + model.getPrice() + " / " + model.getUnit();
                 holder.price.setText(_price);
 //                holder.ratingBar.setRating((float) model.getRating());
                 holder.description.setText(model.getDescription());
+                Picasso.with(getApplicationContext()).load(model.getImageUrls().get(0)).into(holder.productImage);
             }
         };
         recentlyAdapter = new FirestoreRecyclerAdapter<Product, recentlyViewHolder>(options3) {
@@ -254,6 +280,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             protected void onBindViewHolder(@NonNull recentlyViewHolder holder, int position, @NonNull final Product model) {
+                holder.name.setText(model.getName());
+                String _price = "Rs. " + model.getPrice() + " / " + model.getUnit();
+                holder.price.setText(_price);
+//                holder.ratingBar.setRating((float) model.getRating());
+                holder.description.setText(model.getDescription());
+                Picasso.with(getApplicationContext()).load(model.getImageUrls().get(0)).into(holder.productImage);
             }
         };
 
@@ -270,7 +302,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         recentlyViewedRecycler.setAdapter(recentlyAdapter);
     }
 
-    private void addToFav(String id, String name, double price, String description, String[] imageUrls) {
+    private boolean wishListContains(final String id) {
+        final boolean[] exist = {false};
+        db.collection("Products")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.get("productID") == id) {
+                                    exist[0] = true;
+//                                    holder.fav.setVisibilty(View.INVISIBLE);
+//                                    holder.fav.setVisibilty(View.VISIBLE);
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return exist[0];
+    }
+
+    private void addToFav(String id, String name, double price, String description, List<String> imageUrls) {
         Map<String, Object> item = new HashMap<>();
         item.put("productID", id);
         item.put("name", name);
@@ -327,11 +382,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         private final TextView name;
         private final ImageView image;
+        private final LinearLayout parent;
 
         public categoryViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             image = itemView.findViewById(R.id.categoryImage);
+            parent = itemView.findViewById(R.id.parent);
         }
     }
 
@@ -339,20 +396,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         private final TextView name;
         private final TextView actualPrice;
-        private final TextView discount;
+        private final TextView discount, unit, description;
         private final ImageView fav;
         private final ImageView noFav;
-        private ImageView image;
-        private RatingBar ratingBar;
+        private final ImageView image;
+        private final RatingBar ratingBar;
+        private final LinearLayout parent;
 
         public discountedViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.discounted_title);
+            name = itemView.findViewById(R.id.featured_title);
             actualPrice = itemView.findViewById(R.id.discounted_actual_price);
             discount = itemView.findViewById(R.id.discounted_discount);
             fav = itemView.findViewById(R.id.fav);
             noFav = itemView.findViewById(R.id.no_fav);
+            parent = itemView.findViewById(R.id.linearLayout);
+            image = itemView.findViewById(R.id.featured_image);
+            ratingBar = itemView.findViewById(R.id.featured_rating);
+            unit = itemView.findViewById(R.id.unit);
+            description = itemView.findViewById(R.id.featured_desc);
         }
     }
 
@@ -411,6 +474,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     public static class moreViewHolder extends RecyclerView.ViewHolder {
 
+        private final LinearLayout parent;
         private final ImageView productImage;
         private final TextView name;
         private final TextView description;
@@ -422,6 +486,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             productImage = itemView.findViewById(R.id.featured_image);
             name = itemView.findViewById(R.id.featured_title);
+            parent = itemView.findViewById(R.id.linearLayout);
             description = itemView.findViewById(R.id.featured_desc);
             ratingBar = itemView.findViewById(R.id.featured_rating);
             price = itemView.findViewById(R.id.featured_price);
@@ -429,9 +494,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static class recentlyViewHolder extends RecyclerView.ViewHolder {
+        private final LinearLayout parent;
+        private final ImageView productImage;
+        private final TextView name;
+        private final TextView description;
+        private final TextView price;
+        private final RatingBar ratingBar;
 
         public recentlyViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            productImage = itemView.findViewById(R.id.featured_image);
+            name = itemView.findViewById(R.id.featured_title);
+            parent = itemView.findViewById(R.id.linearLayout);
+            description = itemView.findViewById(R.id.featured_desc);
+            ratingBar = itemView.findViewById(R.id.featured_rating);
+            price = itemView.findViewById(R.id.featured_price);
         }
     }
 }

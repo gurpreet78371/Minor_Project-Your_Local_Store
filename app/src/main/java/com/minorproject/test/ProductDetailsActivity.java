@@ -11,20 +11,26 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.minorproject.test.adapter.SliderAdapterExample;
 import com.minorproject.test.customer.HomeActivity;
 import com.minorproject.test.customer.MyCartActivity;
+import com.minorproject.test.model.Product;
 import com.minorproject.test.model.Review;
 import com.minorproject.test.model.SliderItem;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -37,10 +43,14 @@ import java.util.List;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
+    // variables
+    private static final String TAG = "ProductDetailsActivity";
+
     // views
     private RecyclerView reviewListRecyclerView;
     private ImageView back, cart;
-    private TextView loadReviews;
+    private TextView loadReviews, name, description, actualPrice, discountedPrice, rating, unit;
+    private RatingBar ratingBar;
 
     // firebase
     private FirebaseFirestore db;
@@ -64,6 +74,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
         loadReviews = findViewById(R.id.load_reviews);
         cart = findViewById(R.id.cart);
         back = findViewById(R.id.back);
+        name = findViewById(R.id.item_name);
+        description = findViewById(R.id.item_description);
+        actualPrice = findViewById(R.id.actual_price);
+        discountedPrice = findViewById(R.id.discounted_price);
+        rating = findViewById(R.id.rating);
+        unit = findViewById(R.id.unit);
+        ratingBar = findViewById(R.id.ratingBar);
 
         // Firebase
         db = FirebaseFirestore.getInstance();
@@ -72,16 +89,59 @@ public class ProductDetailsActivity extends AppCompatActivity {
         sliderItemList = new ArrayList<>();
 
         //dummy data
-        for (int i = 0; i < 5; i++) {
-            SliderItem sliderItem = new SliderItem();
-            sliderItem.setDescription("Slider Item " + i);
-            if (i % 2 == 0) {
-                sliderItem.setImageUrl("https://tinyjpg.com/images/social/website.jpg");
-            } else {
-                sliderItem.setImageUrl("https://tinyjpg.com/images/social/website.jpg");
-            }
-            sliderItemList.add(sliderItem);
-        }
+        String id = getIntent().getStringExtra("productID");
+        final DocumentReference docRef = db.collection("Products")
+                .document(id);
+        docRef.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Product product = document.toObject(Product.class);
+                                assert product != null;
+                                name.setText(product.getName());
+                                description.setText(product.getDescription());
+                                String _actualPrice = String.valueOf(product.getPrice());
+                                actualPrice.setText(_actualPrice);
+                                double actual = product.getPrice();
+                                double _discount = product.getDiscount();
+                                String _discountedPrice = "" + (actual - _discount);
+                                discountedPrice.setText(_discountedPrice);
+                                unit.setText("(per " + product.getUnit() + ")");
+                                ratingBar.setRating(4.5f);
+                                List<String> imageUrls = product.getImageUrls();
+                                for (int i = 0; i < imageUrls.size(); i++) {
+                                    SliderItem sliderItem = new SliderItem();
+                                    sliderItem.setDescription("Slider Item " + i);
+                                    sliderItem.setImageUrl(imageUrls.get(i));
+                                    sliderItemList.add(sliderItem);
+                                }
+                                sliderAdapter = new SliderAdapterExample(getApplicationContext(), sliderItemList);
+                                sliderView.setSliderAdapter(sliderAdapter);
+                                sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+                                sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+                                sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+                                sliderView.setIndicatorSelectedColor(Color.WHITE);
+                                sliderView.setIndicatorUnselectedColor(Color.GRAY);
+                                sliderView.setScrollTimeInSec(3);
+                                sliderView.setAutoCycle(true);
+                                sliderView.startAutoCycle();
+                                sliderView.setOnIndicatorClickListener(new DrawController.ClickListener() {
+                                    @Override
+                                    public void onIndicatorClicked(int position) {
+//                Log.i("GGG", "onIndicatorClicked: " + sliderView.getCurrentPagePosition());
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
 
         sliderAdapter = new SliderAdapterExample(this, sliderItemList);
         sliderView.setSliderAdapter(sliderAdapter);
@@ -177,17 +237,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
     }
 
-    public void removeLastItem(View view) {
-        if (sliderAdapter.getCount() - 1 >= 0)
-            sliderAdapter.deleteItem(sliderAdapter.getCount() - 1);
-    }
-
-    public void addNewItem(View view) {
-        SliderItem sliderItem = new SliderItem();
-        sliderItem.setImageUrl("https://tinyjpg.com/images/social/website.jpg");
-        sliderAdapter.addItem(sliderItem);
-    }
-
     public void addToCart(View view) {
 
     }
@@ -214,13 +263,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+//        adapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+//        adapter.stopListening();
     }
 
     public static class newReviewsHolder extends RecyclerView.ViewHolder {

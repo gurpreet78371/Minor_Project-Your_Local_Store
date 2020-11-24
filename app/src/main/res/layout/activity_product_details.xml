@@ -92,7 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageSliderCardView"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/item_name"
@@ -104,20 +105,27 @@
                     android:textColor="#000"
                     android:textSize="24sp" />
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginBottom="4dp" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="(4.5/5)" />
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="(4.5/5)" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -146,10 +154,11 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
+                    android:id="@+id/constraintLayout"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/textView24"
+                        android:id="@+id/actual_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -168,13 +177,13 @@
                         android:layout_marginTop="21dp"
                         android:layout_weight="1"
                         android:background="@color/red"
-                        app:layout_constraintEnd_toEndOf="@+id/textView24"
-                        app:layout_constraintStart_toStartOf="@+id/textView24"
+                        app:layout_constraintEnd_toEndOf="@+id/actual_price"
+                        app:layout_constraintStart_toStartOf="@+id/actual_price"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/textView25"
+                    android:id="@+id/discounted_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -187,7 +196,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView26"
+                    android:id="@+id/unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -273,7 +282,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingBottom="8dp">
 
         <Button
             android:onClick="addToCart"
@@ -286,7 +296,7 @@
             android:fontFamily="@font/open_sans_semibold"
             android:text="Add to cart"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView7"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -301,7 +311,7 @@
             android:fontFamily="@font/open_sans_semibold"
             android:text="@string/buy_now"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView7"
             app:layout_constraintEnd_toEndOf="parent" />
     </LinearLayout>

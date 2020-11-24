@@ -35,7 +35,7 @@
                 android:lineHeight="23dp"
                 android:text="McDonald's"
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <RatingBar
                 android:id="@+id/featured_rating"
@@ -52,15 +52,18 @@
                 android:layout_marginTop="4dp"
                 android:text="asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas" />
 
-            <TextView
-                android:id="@+id/featured_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Rs. 100 / item"
-                android:textColor="#000" />
-
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/featured_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="16dp"
+            android:text="Rs. 100 / item"
+            android:textColor="#000" />
 
         <ImageView
             android:id="@+id/fav"
